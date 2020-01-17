@@ -264,10 +264,7 @@ class RecipeFinder::CLI
         else 
             puts "Here are your bookmarked recipes. Go to their website to get the recipe instructions."
             puts
-            puts @@bookmarked_recipes.each do |url|
-                puts url
-                puts 
-            end
+            puts @@bookmarked_recipes
         end
         puts
         main_menu_options
