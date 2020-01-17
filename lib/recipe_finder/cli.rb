@@ -39,6 +39,7 @@ class RecipeFinder::CLI
         puts
         puts "To search again, enter a keyword for the dish you would like to cook."
         puts "Or type 'suprise' and we will randomly pick a food to search."
+        puts "If you would like to view your bookmarked recipes, type '000'"
         puts "If you would like to view your shopping list, type '00'." 
         puts "If you would like to view your previously viewed recipes, type '0'."
         puts
@@ -54,6 +55,8 @@ class RecipeFinder::CLI
         puts
         if input.downcase == "exit"
             goodbye
+        elsif input == "000"
+            print_bookmarked_recipes
         elsif input == "00"
             print_shopping_list
         elsif input == "0" 
@@ -154,11 +157,10 @@ class RecipeFinder::CLI
         puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
         puts
         if input.downcase == "yes"
-            binding.pry
             @selected_recipe.ingredientLines.each do |ingredient|
                 @@shopping_list << ingredient
             end
-            @@bookmarked_recipes << (save_url = @selelected__recipe.url.dup)  #HAAALLLPPP
+            @@bookmarked_recipes << (@selected_recipe.url.dup)  
             main_menu_options
         elsif input.downcase == "back"
             list_recipes
@@ -255,13 +257,29 @@ class RecipeFinder::CLI
         main_menu_options
     end
 
+    def print_bookmarked_recipes
+        puts
+        if @@bookmarked_recipes.empty?
+            puts "You haven't bookmarked any recipes yet, after you have selected a recipe, it will be listed here."
+        else 
+            puts "Here are your bookmarked recipes. Go to their website to get the recipe instructions."
+            puts
+            puts @@bookmarked_recipes.each do |url|
+                puts url
+                puts 
+            end
+        end
+        puts
+        main_menu_options
+    end
+
     def goodbye
         puts
         puts "Goodbye :) Come back again when you're hungry."
         puts
     end
 
-    def invalid_choice #don't really have a need for this based on how my code is structured. 
+    def invalid_choice 
         puts
         puts "Whoops! You entered an invalid option. Take a look at the options and try again."
         puts
