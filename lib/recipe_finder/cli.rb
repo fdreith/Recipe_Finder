@@ -2,6 +2,7 @@ class RecipeFinder::CLI
 
     @@shopping_list = []
     @@viewed_recipes = []
+    @@bookmarked_recipes = []
     @@random_search_keywords = ["grain","tofu","tempeh","lentils","beans","vegetarian","vegan","gluten-free","green",
     "salad","tacos","pasta","beef","chicken","turkey","pork","Indian","Italian","Chinese","Asian","Japanese","Thai",
     "Breakfast","Bacon","keto","low calorie","pie","cookies","lasagna","stuffed squash","bread","chili","soup",
@@ -153,9 +154,11 @@ class RecipeFinder::CLI
         puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
         puts
         if input.downcase == "yes"
+            binding.pry
             @selected_recipe.ingredientLines.each do |ingredient|
                 @@shopping_list << ingredient
             end
+            @@bookmarked_recipes << (save_url = @selelected__recipe.url.dup)  #HAAALLLPPP
             main_menu_options
         elsif input.downcase == "back"
             list_recipes
@@ -221,12 +224,20 @@ class RecipeFinder::CLI
         @@shopping_list.clear
     end
 
+    def selected_recipe
+        @selected_recipe
+    end
+
     def shopping_list
         @@shopping_list 
     end
 
     def viewed_recipes 
         @@viewed_recipes
+    end
+
+    def bookmarked_recipes
+        @@bookmarked_recipes
     end
 
     def print_viewed_recipes
