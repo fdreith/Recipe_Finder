@@ -10,8 +10,5 @@ options:
 view a recipe
 -add ingredents from recipe to a shopping list
 
-recipe search - https://developer.edamam.com/
-meal recipe - https://www.themealdb.com/api.php
-cocktail recipe - https://www.thecocktaildb.com/api.php
-
+https://developer.edamam.com/edamam-docs-recipe-api
 

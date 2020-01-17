@@ -1,9 +1,10 @@
-module RecipeFinder;end
+#module RecipeFinder;end
 
 class RecipeFinder::Recipe
-    attr_accessor :label, :ingredients, :calories
+    attr_accessor :label, :ingredientLines, :calories, :url, :healthLabels, :dietLabels
     @@all = []
-    @@shopping_list = []
+    # @@shopping_list = []
+    # @@bookmarked_recipes = []
 
     def initialize(attrs)
         attrs.each do |key, value| 
@@ -16,12 +17,8 @@ class RecipeFinder::Recipe
         @@all << self
     end 
 
-    # def self.create(attrs)
-    #     new_thing = new(attrs)
-    #     new_thing.save
-    # end 
-
     def self.all
         @@all
     end 
+
 end

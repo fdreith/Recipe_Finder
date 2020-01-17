@@ -1,32 +1,27 @@
-require 'pry'
-require 'rest-client'
-require 'json'
-module RecipeFinder;end #not sure I understand this
+
 
 class RecipeFinder::API
     BASE_URL = "https://api.edamam.com/search"
-   
 
     def self.recipe_search(q)
-      response = RestClient.get(BASE_URL,   {params: {
-        app_key: APP_KEY, app_id: APP_ID, 
+      response = RestClient.get(BASE_URL, {params: {
+        app_key: ENV['API_KEY'], app_id: ENV['API_ID'], 
         q: q
     }
     })
       recipe_array = JSON.parse(response.body)["hits"]
 
-    #   recipe_array.each do |recipe|
-    #     RecipeFinder::Recipe.new(recipe)
-    #   end
-      binding.pry
+      recipe_array.each do |recipe|
+        recipe_hash = recipe["recipe"]
+        RecipeFinder::Recipe.new(recipe_hash)
+      end      
     end
 end
 
-RecipeFinder::API.recipe_search("dinner") #need this for the file to run
-#chose lasagna because it's one of the most googled recipes. next to pecan pie and meatloafs -- but lasagna seems more inclusive to dietary restrictions?
+ 
+#"https://api.edamam.com/search?q=chicken&app_id=${YOUR_APP_ID}&app_key=${YOUR_APP_KEY}&from=0&to=3&calories=591-722&health=alcohol-free"
+# RestClient.get 'http://example.com/resource', {params: {id: 50, 'foo' => 'bar'}
 
-
-#ruby ./lib/recipe_finder/api.rb## to run code in terminal 
 
 
 
