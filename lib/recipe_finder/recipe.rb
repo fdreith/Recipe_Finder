@@ -1,10 +1,6 @@
-#module RecipeFinder;end
-
 class RecipeFinder::Recipe
     attr_accessor :label, :ingredientLines, :calories, :url, :healthLabels, :dietLabels
     @@all = []
-    # @@shopping_list = []
-    # @@bookmarked_recipes = []
 
     def initialize(attrs)
         attrs.each do |key, value| 

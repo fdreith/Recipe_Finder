@@ -1,5 +1,3 @@
-
-
 class RecipeFinder::API
     BASE_URL = "https://api.edamam.com/search"
 

@@ -1,14 +1,2 @@
-Cooking recipe chooser program that adds items to your grocery list:
-Hello! Are you hungry? What are you in the mood for?
-options:
--suprise me
--pick by ingredent
--pick my calorie count
--pick a recipe from a list of recipes (show all)— data from an API
-    -chose a recipe at random
 
-view a recipe
--add ingredents from recipe to a shopping list
-
-https://developer.edamam.com/edamam-docs-recipe-api
 
