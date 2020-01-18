@@ -17,10 +17,6 @@ class RecipeFinder::CLI
         puts "                           ••••••••••••••••••••••••     "
         puts "                       •••••••••••••••••••••••••••••••••"
         puts
-        first_main_menu_options
-    end
-
-    def first_main_menu_options
         puts
         puts "Enter a keyword for the dish you would like to cook."
         puts "Be vague if you like :)"
@@ -31,11 +27,10 @@ class RecipeFinder::CLI
         puts "Type 'exit' to exit the program." 
         puts
         main_menu_input
+        puts
     end
 
     def main_menu_options
-        puts
-        puts "                         <<<<< MAIN MENU >>>>>"
         puts
         puts "To search again, enter a keyword for the dish you would like to cook."
         puts "Or type 'suprise' and we will randomly pick a food to search."
@@ -46,13 +41,13 @@ class RecipeFinder::CLI
         puts "Type 'exit' to exit the program." 
         puts
         main_menu_input
+        puts 
+
     end
 
     def main_menu_input
         input = gets.strip
-        puts
-        puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
-        puts
+        # puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
         if input.downcase == "exit"
             goodbye
         elsif input == "000"
@@ -65,17 +60,17 @@ class RecipeFinder::CLI
             item = @@random_search_keywords.sample
             RecipeFinder::API.recipe_search(item)
             list_recipes
-            sub_menu_options
+            recipe_list_options
         else 
             RecipeFinder::API.recipe_search(input)
             list_recipes
-            sub_menu_options
+            recipe_list_options
         end
     end
 
     def list_recipes
         puts
-        puts "Does anything sound appetizing?"
+        puts "Do any of these recipes sound appetizing?"
         puts
         RecipeFinder::Recipe.all.each.with_index(1) do |recipe, i|
             puts "  #{i}. #{recipe.label}: #{recipe.dietLabels.join}"
@@ -83,23 +78,22 @@ class RecipeFinder::CLI
         puts
     end
 
-    def sub_menu_options
+    def recipe_list_options
         puts
-        puts "To view the recipe and ingredients, choose a corresponding number with"
-        puts "the recipe you would like to view." 
-        puts "If nothing looks good, type another food to continue searching."
+        puts "To view the recipe and ingredients, choose a recipe by typing the"
+        puts "corresponding number." 
+        puts "If you's like to continue searching, type another food."
         puts "Or type 'suprise'." 
         puts
-        puts "Or type 'exit' to exit the program." 
+        puts "Type 'exit' to exit the program." 
         puts
-        sub_menu_input
+        recipe_list_input
+        puts
     end
 
-    def sub_menu_input
+    def recipe_list_input
         input = gets.strip
-        puts
-        puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
-        puts
+        # puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
         if input.to_i.between?(1, RecipeFinder::Recipe.all.length)
             @selected_recipe = RecipeFinder::Recipe.all[input.to_i - 1]
             print_recipe(@selected_recipe)
@@ -109,11 +103,11 @@ class RecipeFinder::CLI
             item = @@random_search_keywords.sample
             RecipeFinder::API.recipe_search(item)
             list_recipes
-            sub_menu_options
+            recipe_list_options
           else
             RecipeFinder::API.recipe_search(input)
             list_recipes
-            sub_menu_options
+            recipe_list_options
           end
     end
 
@@ -135,7 +129,6 @@ class RecipeFinder::CLI
         end
         puts
         puts "To view recipe directions, visit: #{recipe.url}" 
-        puts
         add_ingredients_options
     end
 
@@ -153,30 +146,31 @@ class RecipeFinder::CLI
 
     def add_ingredients_input
         input = gets.strip
-        puts
-        puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
-        puts
         if input.downcase == "yes"
             @selected_recipe.ingredientLines.each do |ingredient|
                 @@shopping_list << ingredient
             end
-            @@bookmarked_recipes << (@selected_recipe.url.dup)  
+            @@bookmarked_recipes << @selected_recipe.dup
+            puts
+            puts "This recipe has been bookmarked and the ingredients have been added to your"
+            puts "shopping list"
+            puts
+            # puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
             main_menu_options
         elsif input.downcase == "back"
             list_recipes
-            puts
-            sub_menu_options
+            recipe_list_options
         elsif input.downcase == "exit"
             goodbye
         elsif input == "suprise"
             item = @@random_search_keywords.sample
             RecipeFinder::API.recipe_search(item)
             list_recipes
-            sub_menu_options
+            recipe_list_options
         else
             RecipeFinder::API.recipe_search(input)
             list_recipes
-            sub_menu_options
+            recipe_list_options
         end
     end
 
@@ -187,7 +181,9 @@ class RecipeFinder::CLI
         else 
             puts "Your Shopping List:"
             puts
-            puts @@shopping_list 
+            @@shopping_list.each do |ingredient|
+                puts "  • #{ingredient}"
+            end
             puts
         end
         shopping_list_options
@@ -203,12 +199,10 @@ class RecipeFinder::CLI
         puts
         shopping_list_input
     end
-
+    
     def shopping_list_input
         input = gets.strip
-        puts
-        puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
-        puts
+        # puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
         if input.downcase == "clear"
             clear_list
             main_menu_options
@@ -222,35 +216,17 @@ class RecipeFinder::CLI
         end
     end
 
-    def clear_list
-        @@shopping_list.clear
-    end
-
-    def selected_recipe
-        @selected_recipe
-    end
-
-    def shopping_list
-        @@shopping_list 
-    end
-
-    def viewed_recipes 
-        @@viewed_recipes
-    end
-
-    def bookmarked_recipes
-        @@bookmarked_recipes
-    end
-
     def print_viewed_recipes
         puts
         if @@viewed_recipes.empty?
-            puts "You haven't viewed any recipes, after you have selected a recipe, it will be listed here."
+            puts "You haven't viewed any recipes, after you have selected a recipe,"
+            puts "it will be listed here."
         else 
-            puts "Here are the recipes you've viewed. Go to their website to get the recipe instructions."
+            puts "Here are the recipes you've viewed. Go to their website to get the"
+            puts "recipe instructions."
             puts
             @@viewed_recipes.each.with_index(1) do |recipe, i|
-                puts "#{i}. #{recipe.label}:   #{recipe.url}"
+                puts "  #{i}. #{recipe.label}:   #{recipe.url}"
             end
         end
         puts
@@ -260,27 +236,35 @@ class RecipeFinder::CLI
     def print_bookmarked_recipes
         puts
         if @@bookmarked_recipes.empty?
-            puts "You haven't bookmarked any recipes yet, after you have selected a recipe, it will be listed here."
+            puts "You haven't bookmarked any recipes yet, after you have selected"
+            puts "a recipe, it will be listed here."
         else 
-            puts "Here are your bookmarked recipes. Go to their website to get the recipe instructions."
+            puts "Here are your bookmarked recipes. Go to their website to get the"
+            puts "recipe instructions."
             puts
-            puts @@bookmarked_recipes
+            @@bookmarked_recipes.each.with_index(1) do |recipe, i|
+                puts "  #{i}. #{recipe.label}: #{recipe.url}"
+            end
         end
-        puts
         main_menu_options
+    end
+
+    def clear_list
+        @@shopping_list.clear
     end
 
     def goodbye
         puts
         puts "Goodbye :) Come back again when you're hungry."
         puts
+        puts "       ˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚˚"
     end
 
     def invalid_choice 
         puts
-        puts "Whoops! You entered an invalid option. Take a look at the options and try again."
+        puts "Whoops! You entered an invalid option. Take a look at the options and "
+        puts "try again."
         puts
     end
-
 
 end
