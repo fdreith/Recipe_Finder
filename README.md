@@ -1,8 +1,10 @@
 # RecipeFinder
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/recipe_finder`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to the Recipe Finder! 
 
-TODO: Delete this and the text above, and describe your gem
+Provides information about the recipe, such as ingredients, calories, the url to visit for the directions, and health labels, such as 'gluten-free' or 'nut-free'. You can select recipes to bookmark and add the ingredients to a shopping list.  
+
+Happy searching :) 
 
 ## Installation
 
@@ -22,7 +24,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Once in the program's directory, run by executing `./bin/run`. And follow the application's prompts to search for recipes. You can exit at any time by typing `exit`. Make sure to return every response you make. 
 
 ## Development
 
