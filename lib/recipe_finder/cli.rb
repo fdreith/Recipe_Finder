@@ -94,18 +94,18 @@ class RecipeFinder::CLI
         if input.to_i.between?(1, RecipeFinder::Recipe.all.length)
             @selected_recipe = RecipeFinder::Recipe.all[input.to_i - 1]
             print_recipe(@selected_recipe)
-          elsif input.downcase == "exit"
+        elsif input.downcase == "exit"
             goodbye
-          elsif input == "suprise"
+        elsif input == "suprise"
             item = @@random_search_keywords.sample
             RecipeFinder::API.recipe_search(item)
             list_recipes
             recipe_list_options
-          else
+        else
             RecipeFinder::API.recipe_search(input)
             list_recipes
             recipe_list_options
-          end
+        end
     end
 
     def print_recipe(recipe)
@@ -131,8 +131,8 @@ class RecipeFinder::CLI
 
     def add_ingredients_options
         puts
-        puts "  Would you like to add these ingredents to your shopping list?"
-        puts "  If so, type 'yes'." 
+        puts "  Would you like to bookmark this recipe and add these ingredents to your" 
+        puts "  shopping list? If so, type 'yes'." 
         puts "  If you would like to view the previous list of options, type 'back'." 
         puts "  To search again, enter a keyword for the dish you would like to cook."
         puts  
@@ -177,8 +177,8 @@ class RecipeFinder::CLI
         else   
             puts "  Your Shopping List:"
             puts
-            @@shopping_list.each do |ingredient|
-                puts "  • #{ingredient}"
+            @@shopping_list.each.with_index(1) do |ingredient, i|
+                puts "  #{i}. #{ingredient}"
             end
             puts
         end
@@ -187,11 +187,14 @@ class RecipeFinder::CLI
 
     def shopping_list_options
         puts 
+        puts "  If you would like to add an item, type it in."
+        puts "  If you would like to remove an item, type the number corresponding with" 
+        puts "  the ingredient you would like to remove."
         puts "  Did you go to the store? Type 'clear' to delete all items in your list." 
         puts "  If you would like to add an item, type it in." 
         puts "  Type 'menu', to go back to the main menu, and search again."
-        puts "  If you would like to view your bookmarked recipes, type '000'"
-        puts "  If you would like to view your shopping list, type '00'." 
+        puts "  To view your bookmarked recipes, type '000'"
+        puts "  To view your shopping list, type '00'." 
         puts "  If you would like to view your previously viewed recipes, type '0'."
         puts  
         puts "  Type 'exit' to exit the program." 
@@ -204,6 +207,10 @@ class RecipeFinder::CLI
         if input.downcase == "clear"
             clear_list
             main_menu_options
+        elsif input.to_i.between?(1, @@shopping_list.length)
+            item = @@shopping_list[input.to_i - 1]
+            @@shopping_list.delete(item)
+            print_shopping_list
         elsif input.downcase == "menu"
             main_menu_options
         elsif input.downcase == "exit"
@@ -234,7 +241,7 @@ class RecipeFinder::CLI
             end
         end
         puts
-        main_menu_options
+        viewed_recipes_options 
     end
 
     def print_bookmarked_recipes
@@ -250,7 +257,71 @@ class RecipeFinder::CLI
                 puts "   #{i}. #{recipe.label}: #{recipe.url}"
             end
         end
-        main_menu_options
+        bookmarked_options
+    end
+
+    def bookmarked_options
+        puts
+        puts "  To view the recipe and ingredients, choose a recipe by typing the"
+        puts "  corresponding number." 
+        puts "  If you's like to continue searching, type another food."
+        puts "  Or type 'suprise'." 
+        puts  
+        puts "  Type 'exit' to exit the program." 
+        puts
+        bookmarked_recipe_input
+        puts
+    end
+
+    def viewed_recipes_options
+        puts
+        puts "  To view the recipe and ingredients, choose a recipe by typing the"
+        puts "  corresponding number." 
+        puts "  If you's like to continue searching, type another food."
+        puts "  Or type 'suprise'." 
+        puts  
+        puts "  Type 'exit' to exit the program." 
+        puts
+        viewed_recipes_input
+        puts
+    end
+
+    def bookmarked_recipe_input
+        input = gets.strip
+        if input.to_i.between?(1, @@bookmarked_recipes.length)
+            @selected_recipe = @@bookmarked_recipes[input.to_i - 1]
+            print_recipe(@selected_recipe)
+        elsif input.downcase == "exit"
+            goodbye
+        elsif input == "suprise"
+            item = @@random_search_keywords.sample
+            RecipeFinder::API.recipe_search(item)
+            list_recipes
+            recipe_list_options
+        else
+            RecipeFinder::API.recipe_search(input)
+            list_recipes
+            recipe_list_options
+        end
+    end
+
+    def viewed_recipes_input
+        input = gets.strip
+        if input.to_i.between?(1, @@viewed_recipes.length)
+            @selected_recipe = @@viewed_recipes[input.to_i - 1]
+            print_recipe(@selected_recipe)
+        elsif input.downcase == "exit"
+            goodbye
+        elsif input == "suprise"
+            item = @@random_search_keywords.sample
+            RecipeFinder::API.recipe_search(item)
+            list_recipes
+            recipe_list_options
+        else
+            RecipeFinder::API.recipe_search(input)
+            list_recipes
+            recipe_list_options
+        end
     end
 
     def clear_list
