@@ -16,5 +16,4 @@ class RecipeFinder::Recipe
     def self.all
         @@all
     end 
-
 end

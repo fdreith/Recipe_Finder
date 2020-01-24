@@ -60,9 +60,15 @@ class RecipeFinder::CLI
             list_recipes
             recipe_list_options
         else 
-            RecipeFinder::API.recipe_search(input)
-            list_recipes
-            recipe_list_options
+            recipe_choices = RecipeFinder::API.recipe_search(input)
+            # binding.pry
+            if recipe_choices.empty?
+                error_message
+                main_menu_options
+            else
+                list_recipes
+                recipe_list_options
+            end
         end
     end
 
@@ -339,6 +345,12 @@ class RecipeFinder::CLI
         puts
         puts "  Whoops! You entered an invalid option. Take a look at the options and "
         puts "  try again."
+        puts
+    end
+
+    def error_message
+        puts
+        puts "  We're sorry, but there are no recipes with the keyword you gave us."
         puts
     end
 
